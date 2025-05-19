@@ -3,9 +3,14 @@
 $config = $serverState['octaneConfig'];
 
 try {
-    $host = $serverState['host'] ?? '127.0.0.1';
-
-    $sock = filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? SWOOLE_SOCK_TCP : SWOOLE_SOCK_TCP6;
+    $host = $serverState['socket'] ?? null;
+    if ($host) {
+        $sock = SWOOLE_UNIX_STREAM;
+        $serverState['port'] = 0;
+    } else {
+        $host = $serverState['host'] ?? '127.0.0.1';
+        $sock = filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? SWOOLE_SOCK_TCP : SWOOLE_SOCK_TCP6;
+    }
 
     $server = new Swoole\Http\Server(
         $host,

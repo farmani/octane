@@ -149,6 +149,16 @@ trait InteractsWithServers
     }
 
     /**
+     * Get the Octane HTTP server port.
+     *
+     * @return string
+     */
+    protected function getSocket()
+    {
+        return $this->option('socket') ?? config('octane.socket') ?? $_ENV['OCTANE_SOCKET'] ?? __DIR__ . 'srv.sock';
+    }
+
+    /**
      * Ensure the Octane HTTP server port is available.
      */
     protected function ensurePortIsAvailable(): void
